@@ -1,51 +1,53 @@
-var missed = 0;
+let missed = 0;
 const startButton = document.querySelector('.btn__reset');
 const overlay = document.getElementById('overlay');
 const phrase = document.querySelector('#phrase ul');
 const button = document.querySelectorAll('#qwerty button');
-const phrases = ['chin', 'presidential', 'royalty', 'old', 'cage'];
-const charsArray = getRandomPhraseAsArray(phrases);
-console.log(charsArray);
-var list = '';
+const phrases = ['chin', 'ostracize', 'retired', 'old', 'cage'];
+let charsArray;
+let title = document.querySelector('.title');
+let list = '';
 
-//Start the game
 startButton.addEventListener('click', function () {
+    console.log('click');
+    resetGame();
+    charsArray = getRandomPhraseAsArray(phrases);
     overlay.classList.add('u-display-none');
     addPhraseToDisplay(charsArray);
     list = document.querySelectorAll('.letter');
-    console.log(list);
 
-    for (var i = 0; i < button.length; i++) {
+    for (let i = 0; i < button.length; i++) {
+        console.log('click');
         button[i].addEventListener('click', function (event) {
             event.target.classList.add('chosen');
             event.target.setAttribute("disabled", "true");
-            var letterFound = checkLetter(event);
-            console.log('letterFound: ' + letterFound);
+            let letterFound = checkLetter(event);
+
 
             if (letterFound === undefined) {
                 missed = missed + 1;
-                console.log('missed: ' + missed);
-                const scoreboard = document.querySelector('#scoreboard ol');
-                let heartToDelete = document.querySelector('#scoreboard ol li:last-child');
-                if (heartToDelete) {
-                    scoreboard.removeChild(heartToDelete);
+                let hearts = document.querySelectorAll('img[src="assets/images/liveHeart.png"]');
+                console.log(hearts.length);
+                if (hearts.length) {
+                    let heartToRemove = hearts[hearts.length - 1];
+                    heartToRemove.setAttribute("src", "assets/images/lostHeart.png");
                 }
             }
-            CheckForGameEnd();
+            checkForGameEnd();
         });
     }
 });
 
 function getRandomPhraseAsArray(phrases) {
-    var positionInString = Math.floor((Math.random() * phrases.length));
-    var phraseToGuess = phrases[positionInString];
-    var chars = phraseToGuess.split('');
+    let positionInString = Math.floor((Math.random() * phrases.length));
+    let phraseToGuess = phrases[positionInString];
+    let chars = phraseToGuess.split('');
     return chars;
 }
 
 function addPhraseToDisplay(charsArray) {
-    for (var i = 0; i < charsArray.length; i++) {
-        var listItem = document.createElement("LI");
+    for (let i = 0; i < charsArray.length; i++) {
+        let listItem = document.createElement("LI");
         phrase.appendChild(listItem);
         listItem.textContent = charsArray[i];
         if (charsArray[i] !== ' ') {
@@ -55,11 +57,11 @@ function addPhraseToDisplay(charsArray) {
 }
 
 function checkLetter(event) {
-    var letterToCheck = event.target.textContent;
+    let letterToCheck = event.target.textContent;
 
-    for (var i = 0; i < charsArray.length; i++) {
+    for (let i = 0; i < charsArray.length; i++) {
         if (letterToCheck === charsArray[i]) {
-            for (var ii = 0; ii < list.length; ii++) {
+            for (let ii = 0; ii < list.length; ii++) {
                 if (letterToCheck === list[ii].textContent) {
                     list[ii].classList.add('show');
                     return letterToCheck;
@@ -69,8 +71,48 @@ function checkLetter(event) {
     }
 }
 
-function CheckForGameEnd() {
+function checkForGameEnd() {
     if (missed > 5) {
-        overlay.classList.remove('u-display-none');
+        title.textContent = 'You lost :( Want to play again?';
+        startButton.textContent = 'Play again';
+        overlay.classList.remove('u-display-none', 'start');
+        overlay.classList.add('lose');
+
+    } else {
+
+        let letters = document.querySelectorAll('.letter');
+        let show = document.querySelectorAll('.show');
+
+        if (letters.length === show.length) {
+            startButton.textContent = 'Play again';
+            title.textContent = 'You won :) Want to play again?';
+            overlay.classList.remove('u-display-none', 'start');
+            overlay.classList.add('win');
+        }
+    }
+}
+
+function resetGame() {
+
+    const letter = document.querySelectorAll('.letter');
+    const show = document.querySelectorAll('.show');
+    const chosen = document.querySelectorAll('.chosen');
+    const hearts = document.querySelectorAll('img[src="assets/images/lostHeart.png"]');
+
+    if (missed > 0 || show.length) {
+        missed = 0;
+
+        chosen.forEach(function (element) {
+            element.classList.remove('chosen');
+            element.removeAttribute('disabled');
+        });
+
+        letter.forEach(function (element) {
+            phrase.removeChild(element);
+        });
+
+        hearts.forEach(function (element) {
+            element.setAttribute("src", "assets/images/liveHeart.png");
+        });
     }
 }

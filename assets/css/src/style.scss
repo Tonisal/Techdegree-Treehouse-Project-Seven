@@ -1,8 +1,9 @@
 @import 'treehouse-basic-style';
-@import 'variables';
-
-
 
 .u-display-none {
   display: none !important;
+}
+
+.show {
+  transition: all 0.5s linear;
 }
