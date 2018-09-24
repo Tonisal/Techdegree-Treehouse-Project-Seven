@@ -8,6 +8,27 @@ let charsArray;
 let title = document.querySelector('.title');
 let list = '';
 
+
+for (let i = 0; i < button.length; i++) {
+    button[i].addEventListener('click', function (event) {
+        event.target.classList.add('chosen');
+        event.target.setAttribute("disabled", "true");
+        let letterFound = checkLetter(event);
+
+
+        if (letterFound === undefined) {
+            missed = missed + 1;
+            let hearts = document.querySelectorAll('img[src="assets/images/liveHeart.png"]');
+            console.log(hearts.length);
+            if (hearts.length) {
+                let heartToRemove = hearts[hearts.length - 1];
+                heartToRemove.setAttribute("src", "assets/images/lostHeart.png");
+            }
+        }
+        checkForGameEnd();
+    });
+}
+
 startButton.addEventListener('click', function () {
     console.log('click');
     resetGame();
@@ -15,27 +36,6 @@ startButton.addEventListener('click', function () {
     overlay.classList.add('u-display-none');
     addPhraseToDisplay(charsArray);
     list = document.querySelectorAll('.letter');
-
-    for (let i = 0; i < button.length; i++) {
-        console.log('click');
-        button[i].addEventListener('click', function (event) {
-            event.target.classList.add('chosen');
-            event.target.setAttribute("disabled", "true");
-            let letterFound = checkLetter(event);
-
-
-            if (letterFound === undefined) {
-                missed = missed + 1;
-                let hearts = document.querySelectorAll('img[src="assets/images/liveHeart.png"]');
-                console.log(hearts.length);
-                if (hearts.length) {
-                    let heartToRemove = hearts[hearts.length - 1];
-                    heartToRemove.setAttribute("src", "assets/images/lostHeart.png");
-                }
-            }
-            checkForGameEnd();
-        });
-    }
 });
 
 function getRandomPhraseAsArray(phrases) {
