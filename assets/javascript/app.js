@@ -72,7 +72,7 @@ function checkLetter(event) {
 }
 
 function checkForGameEnd() {
-    if (missed > 5) {
+    if (missed >= 5) {
         title.textContent = 'You lost :( Want to play again?';
         startButton.textContent = 'Play again';
         overlay.classList.remove('u-display-none', 'start');
