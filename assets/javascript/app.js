@@ -3,7 +3,7 @@ const startButton = document.querySelector('.btn__reset');
 const overlay = document.getElementById('overlay');
 const phrase = document.querySelector('#phrase ul');
 const button = document.querySelectorAll('#qwerty button');
-const phrases = ['chin', 'ostracize', 'retired', 'old', 'cage'];
+const phrases = ['hi guys', 'retirement', 'retired', 'old', 'cage'];
 let charsArray;
 let title = document.querySelector('.title');
 let list = '';
@@ -52,6 +52,8 @@ function addPhraseToDisplay(charsArray) {
         listItem.textContent = charsArray[i];
         if (charsArray[i] !== ' ') {
             listItem.classList.add('letter');
+        } else {
+            listItem.classList.add('space');
         }
     }
 }
